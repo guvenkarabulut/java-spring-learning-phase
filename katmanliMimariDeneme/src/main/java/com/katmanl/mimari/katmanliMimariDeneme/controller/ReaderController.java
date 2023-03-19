@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path="/api")
 public class ReaderController {
     @Autowired
-    @Qualifier("excelFileReader")
+    @Qualifier("EXCEL")
     private Reader reader;
     @GetMapping(path="/read")
     public String read(){
