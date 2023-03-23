@@ -1,7 +1,12 @@
 package com.appsdeveloperblog.app.ws.mobileappws.ui.controller;
 
 import com.appsdeveloperblog.app.ws.mobileappws.ui.model.response.UserRest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.awt.*;
 
 @RestController
 @RequestMapping(path="users")// ! http://localhost:8080/users
@@ -16,24 +21,29 @@ public class UserController {
             ,@RequestParam(value = "sort",required = false) String sort){
         return "get users was called with page: "+page+" limit: "+limit +" sort: "+sort;
     }
-    @GetMapping(path="/{userId}")// ! http://localhost:8080/users/{userId}
-    public UserRest getUser(@PathVariable String userId){
+    // ! http://localhost:8080/users/{userId}
+    @GetMapping(path="/{userId}",produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<UserRest> getUser(@PathVariable String userId){
         UserRest returnValue = new UserRest();
         returnValue.setEmail("sea@gmail.com");
         returnValue.setFirstName("sea");
         returnValue.setLastName("ase");
+        returnValue.setUserId(userId);
 
-        return returnValue;
+        return new ResponseEntity<UserRest>(returnValue,HttpStatus.BAD_REQUEST);
     }
-    @PostMapping// ! http://localhost:8080/users
+    // ! http://localhost:8080/users
+    @PostMapping
     public String createUser(){
         return "createUser was called";
     }
-    @PutMapping// ! http://localhost:8080/users
+    // ! http://localhost:8080/users
+    @PutMapping
     public String updateUser(){
         return "updateUser was called";
     }
-    @DeleteMapping// ! http://localhost:8080/users
+    // ! http://localhost:8080/user
+    @DeleteMapping
     public String deleteUser(){
         return  "deleteUser wass called";
     }
