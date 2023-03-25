@@ -6,13 +6,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
-
 @RestController
 @RequestMapping(path="users")// ! http://localhost:8080/users
 public class UserController {
     @GetMapping// ! http://localhost:8080/users?page=<pageNo>&limit=<limitNo>&sort<sort>
-    // ! here sort a optinial parameter if you dont type ws return null for sort parameter
+    // ! here sort a optional parameter if you don't type ws return null for sort parameter
     // ! req:http://localhost:8080/users?page=1&limit=50
     // ! res:get users was called with page: 1 limit: 50sort: null
     public String getUsers(
@@ -45,6 +43,6 @@ public class UserController {
     // ! http://localhost:8080/user
     @DeleteMapping
     public String deleteUser(){
-        return  "deleteUser wass called";
+        return  "deleteUser was called";
     }
 }
