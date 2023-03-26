@@ -24,33 +24,33 @@ import java.util.UUID;
 public class UserController {
     Map<String,UserRest> users;
     @Autowired
-    UserService userService;
+    UserService userService=new UserServiceImpl();
 
     @GetMapping// ! http://localhost:8080/users?page=<pageNo>&limit=<limitNo>&sort<sort>
     // ! here sort a optional parameter if you don't type ws return null for sort parameter
     // ! req:http://localhost:8080/users?page=1&limit=50
     // ! res:get users was called with page: 1 limit: 50 sort: null
-    public String getUsers(
+  public String getUsers(
             @RequestParam(value = "page",defaultValue = "1") int page
             ,@RequestParam(value = "limit") int limit
             ,@RequestParam(value = "sort",required = false) String sort){
         return "get users was called with page: "+page+" limit: "+limit +" sort: "+sort;
     }
+
+
     // ! http://localhost:8080/users/{userId}
     @GetMapping(path="/{userId}",produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserRest> getUser(@PathVariable String userId){
-        if (true) throw new UserServiceException("A User Service Exception is throw");
-        if (users.containsKey(userId)){
-            return new ResponseEntity<UserRest>(users.get(userId),HttpStatus.OK);
-        }else {
-            return new ResponseEntity<UserRest>(HttpStatus.NO_CONTENT);
-        }
+        UserRest returnValue =  userService.getUser(userId);
+
+        return new ResponseEntity<UserRest>(returnValue, HttpStatusCode.valueOf(250));
     }
     // ! http://localhost:8080/users
     @PostMapping(consumes = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE}
             ,produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserRest> createUser(@Valid @RequestBody  UserDetailRequestModel userDetails) {
-        UserRest returnValue = new UserServiceImpl().createUser(userDetails);
+        UserRest returnValue = userService.createUser(userDetails);
+        System.out.println("Controller"+users);
 
         return new ResponseEntity<UserRest>(returnValue, HttpStatusCode.valueOf(250));
     }
