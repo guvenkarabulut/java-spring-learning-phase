@@ -38,4 +38,9 @@ public class UserServiceImpl implements UserService {
     public UserRest getUser(String id){
         return users.get(id);
     }
+
+    @Override
+    public Map<String, UserRest> getUsers() {
+        return users;
+    }
 }

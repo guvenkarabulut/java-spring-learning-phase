@@ -25,7 +25,7 @@ public class UserController {
     Map<String,UserRest> users;
     @Autowired
     UserService userService=new UserServiceImpl();
-
+/*
     @GetMapping// ! http://localhost:8080/users?page=<pageNo>&limit=<limitNo>&sort<sort>
     // ! here sort a optional parameter if you don't type ws return null for sort parameter
     // ! req:http://localhost:8080/users?page=1&limit=50
@@ -36,7 +36,12 @@ public class UserController {
             ,@RequestParam(value = "sort",required = false) String sort){
         return "get users was called with page: "+page+" limit: "+limit +" sort: "+sort;
     }
-
+ */
+    @GetMapping(produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
+    public Map<String,UserRest> getUsers(){
+        Map<String,UserRest> returnValue=userService.getUsers();
+        return returnValue;
+    }
 
     // ! http://localhost:8080/users/{userId}
     @GetMapping(path="/{userId}",produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})

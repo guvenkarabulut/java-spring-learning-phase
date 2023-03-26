@@ -9,4 +9,5 @@ import java.util.Map;
 public interface UserService {
     UserRest createUser(UserDetailRequestModel userDetails);
     UserRest getUser(String id);
+    Map<String,UserRest> getUsers();
 }
