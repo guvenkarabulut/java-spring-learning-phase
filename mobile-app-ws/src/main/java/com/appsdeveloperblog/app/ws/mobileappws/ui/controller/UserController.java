@@ -1,10 +1,14 @@
 package com.appsdeveloperblog.app.ws.mobileappws.ui.controller;
 
+import com.appsdeveloperblog.app.ws.mobileappws.exceptions.UserServiceException;
 import com.appsdeveloperblog.app.ws.mobileappws.ui.model.request.UpdateUserDetailRequestModel;
 import com.appsdeveloperblog.app.ws.mobileappws.ui.model.request.UserDetailRequestModel;
 import com.appsdeveloperblog.app.ws.mobileappws.ui.model.response.UserRest;
+import com.appsdeveloperblog.app.ws.mobileappws.userService.UserService;
+import com.appsdeveloperblog.app.ws.mobileappws.userService.impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -19,6 +23,8 @@ import java.util.UUID;
 @RequestMapping(path="users")// ! http://localhost:8080/users
 public class UserController {
     Map<String,UserRest> users;
+    @Autowired
+    UserService userService;
 
     @GetMapping// ! http://localhost:8080/users?page=<pageNo>&limit=<limitNo>&sort<sort>
     // ! here sort a optional parameter if you don't type ws return null for sort parameter
@@ -33,6 +39,7 @@ public class UserController {
     // ! http://localhost:8080/users/{userId}
     @GetMapping(path="/{userId}",produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserRest> getUser(@PathVariable String userId){
+        if (true) throw new UserServiceException("A User Service Exception is throw");
         if (users.containsKey(userId)){
             return new ResponseEntity<UserRest>(users.get(userId),HttpStatus.OK);
         }else {
@@ -43,15 +50,8 @@ public class UserController {
     @PostMapping(consumes = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE}
             ,produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserRest> createUser(@Valid @RequestBody  UserDetailRequestModel userDetails) {
-        UserRest returnValue = new UserRest();
-        returnValue.setEmail(userDetails.getEmail());
-        returnValue.setFirstName(userDetails.getFirstName());
-        returnValue.setLastName(userDetails.getLastName());
+        UserRest returnValue = new UserServiceImpl().createUser(userDetails);
 
-        String userID = UUID.randomUUID().toString();
-        returnValue.setUserId(userID);
-        if(users==null) users=new HashMap<>();
-        users.put(userID,returnValue);
         return new ResponseEntity<UserRest>(returnValue, HttpStatusCode.valueOf(250));
     }
     // ! http://localhost:8080/users
